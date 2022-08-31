@@ -1,6 +1,7 @@
 package com.devfortech.HelloWord.controller;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -24,13 +25,13 @@ public class ClientController {
 	private ClientsService service;
 	
 	@GetMapping
-	public ResponseEntity<ArrayList<ClientsDTO>> findAll() {
-		ArrayList<ClientsDTO> clients = service.findAll();
+	public ResponseEntity<List<ClientsDTO>> findAll() {
+		List<ClientsDTO> clients = service.findAll();
 		return ResponseEntity.ok().body(clients);
 	}
 	
 	@GetMapping(value="/{id}")
-	public ResponseEntity<ClientsDTO> findById(@PathVariable Long id) {
+	public ResponseEntity<ClientsDTO> findById(@PathVariable Long id) throws Exception {
 		ClientsDTO client = service.findById(id);
 		return ResponseEntity.ok().body(client);
 	}
@@ -42,7 +43,7 @@ public class ClientController {
 	}
 	
 	@PutMapping(value = "/{id}")
-	public ResponseEntity<ClientsDTO> update(@PathVariable Long id, @RequestBody ClientsDTO dto){
+	public ResponseEntity<ClientsDTO> update(@PathVariable Long id, @RequestBody ClientsDTO dto) throws Exception{
 		dto = service.update(id, dto);
 		return ResponseEntity.ok().body(dto);
 	}

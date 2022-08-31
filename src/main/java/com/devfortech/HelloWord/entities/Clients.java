@@ -1,13 +1,25 @@
-package com.devfortech.HelloWord.dto;
+package com.devfortech.HelloWord.entities;
 
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.Objects;
 
-import com.devfortech.HelloWord.entities.Clients;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
-public class ClientsDTO implements Serializable {
+import com.devfortech.HelloWord.dto.ClientsDTO;
+
+@Entity
+@Table(name = "tb_clients")
+public class Clients implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
+	@Id
+	@GeneratedValue( strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String name;
 	private String cpf;
@@ -17,9 +29,15 @@ public class ClientsDTO implements Serializable {
 	private String city;
 	private String country;
 	
-	public ClientsDTO() {}
+	@Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
+	private Instant createdAt;
 	
-	public ClientsDTO(Long id, String name, String cpf, String email, String endereco, String cep, String city,
+	@Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
+	private Instant updatedAt;
+	
+	public Clients() {}
+	
+	public Clients(Long id, String name, String cpf, String email, String endereco, String cep, String city,
 			String country) {
 		this.id = id;
 		this.name = name;
@@ -31,15 +49,15 @@ public class ClientsDTO implements Serializable {
 		this.country = country;
 	}
 	
-	public ClientsDTO(Clients entity) {
-		this.id = entity.getId();
-		this.name = entity.getName();
-		this.cpf = entity.getCpf();
-		this.email = entity.getEmail();
-		this.endereco = entity.getEndereco();
-		this.cep = entity.getCep();
-		this.city = entity.getCity();
-		this.country = entity.getCountry();
+	public Clients(ClientsDTO dto) {
+		this.id = dto.getId();
+		this.name = dto.getName();
+		this.cpf = dto.getCpf();
+		this.email = dto.getEmail();
+		this.endereco = dto.getEndereco();
+		this.cep = dto.getCep();
+		this.city = dto.getCity();
+		this.country = dto.getCountry();
 	}
 
 	public Long getId() {
@@ -93,7 +111,7 @@ public class ClientsDTO implements Serializable {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(cep, city, country, cpf, email, endereco, id, name);
+		return Objects.hash(cep, city, country, cpf, createdAt, email, endereco, id, name, updatedAt);
 	}
 
 	@Override
@@ -104,10 +122,14 @@ public class ClientsDTO implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		ClientsDTO other = (ClientsDTO) obj;
+		Clients other = (Clients) obj;
 		return Objects.equals(cep, other.cep) && Objects.equals(city, other.city)
 				&& Objects.equals(country, other.country) && Objects.equals(cpf, other.cpf)
-				&& Objects.equals(email, other.email) && Objects.equals(endereco, other.endereco)
-				&& Objects.equals(id, other.id) && Objects.equals(name, other.name);
+				&& Objects.equals(createdAt, other.createdAt) && Objects.equals(email, other.email)
+				&& Objects.equals(endereco, other.endereco) && Objects.equals(id, other.id)
+				&& Objects.equals(name, other.name) && Objects.equals(updatedAt, other.updatedAt);
 	}
+
+	
+	
 }
