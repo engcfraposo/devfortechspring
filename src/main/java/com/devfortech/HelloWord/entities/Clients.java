@@ -59,6 +59,17 @@ public class Clients implements Serializable {
 		this.city = dto.getCity();
 		this.country = dto.getCountry();
 	}
+	
+	public Clients(Long id, ClientsDTO dto) {
+		this.id = id;
+		this.name = dto.getName();
+		this.cpf = dto.getCpf();
+		this.email = dto.getEmail();
+		this.endereco = dto.getEndereco();
+		this.cep = dto.getCep();
+		this.city = dto.getCity();
+		this.country = dto.getCountry();
+	}
 
 	public Long getId() {
 		return id;

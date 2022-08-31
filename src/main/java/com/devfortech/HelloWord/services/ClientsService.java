@@ -46,7 +46,7 @@ public class ClientsService {
 	public ClientsDTO update(Long id, ClientsDTO dto) throws Exception {
 		try {
 			Clients entity = repository.getReferenceById(id);
-			entity = repository.save(new Clients(dto));
+			entity = repository.save(new Clients(id,dto));
 			return new ClientsDTO(entity);
 		}
 		catch (Exception e) {
@@ -55,7 +55,7 @@ public class ClientsService {
 	}
 
 	public void delete(Long id) {
-
+		repository.deleteById(id);
 	}
 	
 }
