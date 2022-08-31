@@ -11,6 +11,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import com.devfortech.HelloWord.dto.ClientsDTO;
 
 @Entity
@@ -30,10 +33,11 @@ public class Clients implements Serializable {
 	private String country;
 	
 	@Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
-	private Instant createdAt;
-	
+	@CreationTimestamp
+	private Instant created_at;
 	@Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
-	private Instant updatedAt;
+	@UpdateTimestamp
+	private Instant updated_at;
 	
 	public Clients() {}
 	
@@ -122,7 +126,7 @@ public class Clients implements Serializable {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(cep, city, country, cpf, createdAt, email, endereco, id, name, updatedAt);
+		return Objects.hash(cep, city, country, cpf, created_at, email, endereco, id, name, updated_at);
 	}
 
 	@Override
@@ -136,9 +140,9 @@ public class Clients implements Serializable {
 		Clients other = (Clients) obj;
 		return Objects.equals(cep, other.cep) && Objects.equals(city, other.city)
 				&& Objects.equals(country, other.country) && Objects.equals(cpf, other.cpf)
-				&& Objects.equals(createdAt, other.createdAt) && Objects.equals(email, other.email)
+				&& Objects.equals(created_at, other.created_at) && Objects.equals(email, other.email)
 				&& Objects.equals(endereco, other.endereco) && Objects.equals(id, other.id)
-				&& Objects.equals(name, other.name) && Objects.equals(updatedAt, other.updatedAt);
+				&& Objects.equals(name, other.name) && Objects.equals(updated_at, other.updated_at);
 	}
 
 	
