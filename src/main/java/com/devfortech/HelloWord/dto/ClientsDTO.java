@@ -1,7 +1,6 @@
 package com.devfortech.HelloWord.dto;
 
 import java.io.Serializable;
-import java.util.Objects;
 
 import com.devfortech.HelloWord.entities.Clients;
 

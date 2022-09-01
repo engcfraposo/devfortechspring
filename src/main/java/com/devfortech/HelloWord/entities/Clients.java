@@ -32,9 +32,9 @@ import lombok.Setter;
 @EqualsAndHashCode
 public class Clients implements Serializable {
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
-	@GeneratedValue( strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private @NonNull Long id;
 	private @NonNull String name;
 	private @NonNull String cpf;
@@ -43,14 +43,13 @@ public class Clients implements Serializable {
 	private @NonNull String cep;
 	private @NonNull String city;
 	private @NonNull String country;
-	
+
 	@Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
 	@CreationTimestamp
 	private Instant created_at;
 	@Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
 	@UpdateTimestamp
 	private Instant updated_at;
-	
 
 	public Clients(ClientsDTO dto) {
 		this.id = dto.getId();
@@ -62,7 +61,7 @@ public class Clients implements Serializable {
 		this.city = dto.getCity();
 		this.country = dto.getCountry();
 	}
-	
+
 	public Clients(Long id, ClientsDTO dto) {
 		this.id = id;
 		this.name = dto.getName();
