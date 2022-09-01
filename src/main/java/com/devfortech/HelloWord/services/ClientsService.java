@@ -1,16 +1,22 @@
 package com.devfortech.HelloWord.services;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
+
+import javax.persistence.EntityNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.devfortech.HelloWord.dto.ClientsDTO;
 import com.devfortech.HelloWord.entities.Clients;
 import com.devfortech.HelloWord.repository.ClientsRepository;
+import com.devfortech.HelloWord.services.exceptions.DatabaseException;
+import com.devfortech.HelloWord.services.exceptions.ResourceNotFoundException;
 
 @Service
 public class ClientsService {
@@ -19,19 +25,16 @@ public class ClientsService {
 	private ClientsRepository repository;
 	
 	@Transactional(readOnly = true)
-	public List<ClientsDTO> findAll(){
-		List<Clients> clients = repository.findAll();
-		
-		return clients
-				.stream()
-				.map(entity -> new ClientsDTO(entity))
-				.collect(Collectors.toList());
+	public Page<ClientsDTO> findAll(Pageable pageable){
+		Page<Clients> clients = repository.findAll(pageable);
+		return clients.map(entity -> new ClientsDTO(entity));
+
 	}
 	
 	@Transactional(readOnly = true)
-	public ClientsDTO findById(Long id) throws Exception {
+	public ClientsDTO findById(Long id) {
 		Optional<Clients> obj = repository.findById(id);
-		Clients entity = obj.orElseThrow(()-> new Exception());
+		Clients entity = obj.orElseThrow(()-> new ResourceNotFoundException("Client not found!" + id));
 		return new ClientsDTO(entity);
 	}
 
@@ -43,19 +46,27 @@ public class ClientsService {
 	}
 
 	@Transactional
-	public ClientsDTO update(Long id, ClientsDTO dto) throws Exception {
+	public ClientsDTO update(Long id, ClientsDTO dto) {
 		try {
 			Clients entity = repository.getReferenceById(id);
 			entity = repository.save(new Clients(id,dto));
 			return new ClientsDTO(entity);
 		}
-		catch (Exception e) {
-			throw new Exception(e);
+		catch (EntityNotFoundException e) {
+			throw new ResourceNotFoundException("Client not found!" + id);
 		}
 	}
 
 	public void delete(Long id) {
-		repository.deleteById(id);
+		try {
+			repository.deleteById(id);
+		}
+		catch(EmptyResultDataAccessException e) {
+			throw new ResourceNotFoundException("Client not found!" + id);
+		}
+		catch(DataIntegrityViolationException e) {
+			throw new DatabaseException("Ïntegrity violation");
+		}
 	}
-	
+
 }
