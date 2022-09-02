@@ -13,7 +13,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import com.devfortech.HelloWord.dto.ClientsDTO;
+import com.devfortech.HelloWord.dto.BusinessDTO;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -23,25 +23,26 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "tb_clients")
+@Table(name = "tb_business")
 @Getter
 @Setter
 @NoArgsConstructor
 @RequiredArgsConstructor
 @EqualsAndHashCode
-public class Clients implements Serializable {
+public class Business implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private @NonNull Long id;
 	private @NonNull String name;
-	private @NonNull String cpf;
+	private @NonNull String cnpj;
 	private @NonNull String email;
 	private @NonNull String endereco;
 	private @NonNull String cep;
 	private @NonNull String city;
 	private @NonNull String country;
+	private @NonNull Long price;
 
 	@Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
 	@CreationTimestamp
@@ -50,26 +51,28 @@ public class Clients implements Serializable {
 	@UpdateTimestamp
 	private Instant updated_at;
 
-	public Clients(ClientsDTO dto) {
+	public Business(BusinessDTO dto) {
 		this.id = dto.getId();
 		this.name = dto.getName();
-		this.cpf = dto.getCpf();
+		this.cnpj = dto.getCnpj();
 		this.email = dto.getEmail();
 		this.endereco = dto.getEndereco();
 		this.cep = dto.getCep();
 		this.city = dto.getCity();
 		this.country = dto.getCountry();
+		this.price = dto.getPrice();
 	}
 
-	public Clients(Long id, ClientsDTO dto) {
+	public Business(Long id, BusinessDTO dto) {
 		this.id = id;
 		this.name = dto.getName();
-		this.cpf = dto.getCpf();
+		this.cnpj = dto.getCnpj();
 		this.email = dto.getEmail();
 		this.endereco = dto.getEndereco();
 		this.cep = dto.getCep();
 		this.city = dto.getCity();
 		this.country = dto.getCountry();
+		this.price = dto.getPrice();
 	}
 
 }
