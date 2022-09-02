@@ -13,42 +13,42 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.devfortech.HelloWord.dto.BusinessDTO;
-import com.devfortech.HelloWord.services.BusinessService;
+import com.devfortech.HelloWord.dto.DeliveryDTO;
+import com.devfortech.HelloWord.services.DeliveryService;
 
 @RestController
 @RequestMapping(value = "/business")
-public class BusinessController {
+public class DeliveryController {
 
 	@Autowired
-	private BusinessService service;
+	private DeliveryService service;
 
 	@GetMapping
-	public ResponseEntity<Page<BusinessDTO>> findAll(Pageable pageable) {
-		Page<BusinessDTO> clients = service.findAll(pageable);
+	public ResponseEntity<Page<DeliveryDTO>> findAll(Pageable pageable) {
+		Page<DeliveryDTO> clients = service.findAll(pageable);
 		return ResponseEntity.ok().body(clients);
 	}
 
 	@GetMapping(value = "/{id}")
-	public ResponseEntity<BusinessDTO> findById(@PathVariable Long id){
-		BusinessDTO client = service.findById(id);
+	public ResponseEntity<DeliveryDTO> findById(@PathVariable Long id){
+		DeliveryDTO client = service.findById(id);
 		return ResponseEntity.ok().body(client);
 	}
 
 	@PostMapping
-	public ResponseEntity<BusinessDTO> create(@RequestBody BusinessDTO dto) {
+	public ResponseEntity<DeliveryDTO> create(@RequestBody DeliveryDTO dto) {
 		dto = service.insert(dto);
 		return ResponseEntity.created(null).body(dto);
 	}
 
 	@PutMapping(value = "/{id}")
-	public ResponseEntity<BusinessDTO> update(@PathVariable Long id, @RequestBody BusinessDTO dto) {
+	public ResponseEntity<DeliveryDTO> update(@PathVariable Long id, @RequestBody DeliveryDTO dto) {
 		dto = service.update(id, dto);
 		return ResponseEntity.ok().body(dto);
 	}
 
 	@DeleteMapping(value = "/{id}")
-	public ResponseEntity<BusinessDTO> delete(@PathVariable Long id) {
+	public ResponseEntity<DeliveryDTO> delete(@PathVariable Long id) {
 		service.delete(id);
 		return ResponseEntity.noContent().build();
 	}

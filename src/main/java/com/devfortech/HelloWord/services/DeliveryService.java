@@ -12,45 +12,45 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.devfortech.HelloWord.dto.BusinessDTO;
-import com.devfortech.HelloWord.entities.Business;
-import com.devfortech.HelloWord.repository.BusinessRepository;
+import com.devfortech.HelloWord.dto.DeliveryDTO;
+import com.devfortech.HelloWord.entities.Delivery;
+import com.devfortech.HelloWord.repository.DeliveryRepository;
 import com.devfortech.HelloWord.services.exceptions.DatabaseException;
 import com.devfortech.HelloWord.services.exceptions.ResourceNotFoundException;
 
 @Service
-public class BusinessService {
+public class DeliveryService {
 	
 	@Autowired
-	private BusinessRepository repository;
+	private DeliveryRepository repository;
 	
 	@Transactional(readOnly = true)
-	public Page<BusinessDTO> findAll(Pageable pageable){
-		Page<Business> clients = repository.findAll(pageable);
-		return clients.map(entity -> new BusinessDTO(entity));
+	public Page<DeliveryDTO> findAll(Pageable pageable){
+		Page<Delivery> clients = repository.findAll(pageable);
+		return clients.map(entity -> new DeliveryDTO(entity));
 
 	}
 	
 	@Transactional(readOnly = true)
-	public BusinessDTO findById(Long id) {
-		Optional<Business> obj = repository.findById(id);
-		Business entity = obj.orElseThrow(()-> new ResourceNotFoundException("Business not found!" + id));
-		return new BusinessDTO(entity);
+	public DeliveryDTO findById(Long id) {
+		Optional<Delivery> obj = repository.findById(id);
+		Delivery entity = obj.orElseThrow(()-> new ResourceNotFoundException("Business not found!" + id));
+		return new DeliveryDTO(entity);
 	}
 
 	@Transactional
-	public BusinessDTO insert(BusinessDTO dto) {
-		Business entity = new Business(dto);
+	public DeliveryDTO insert(DeliveryDTO dto) {
+		Delivery entity = new Delivery(dto);
 		entity = repository.save(entity);
-		return new BusinessDTO(entity);
+		return new DeliveryDTO(entity);
 	}
 
 	@Transactional
-	public BusinessDTO update(Long id, BusinessDTO dto) {
+	public DeliveryDTO update(Long id, DeliveryDTO dto) {
 		try {
-			Business entity = repository.getReferenceById(id);
-			entity = repository.save(new Business(id,dto));
-			return new BusinessDTO(entity);
+			Delivery entity = repository.getReferenceById(id);
+			entity = repository.save(new Delivery(id,dto));
+			return new DeliveryDTO(entity);
 		}
 		catch (EntityNotFoundException e) {
 			throw new ResourceNotFoundException("Business not found!" + id);

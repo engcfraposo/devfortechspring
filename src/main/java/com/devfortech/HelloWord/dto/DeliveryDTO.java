@@ -2,7 +2,7 @@ package com.devfortech.HelloWord.dto;
 
 import java.io.Serializable;
 
-import com.devfortech.HelloWord.entities.Business;
+import com.devfortech.HelloWord.entities.Delivery;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -15,7 +15,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
-public class BusinessDTO implements Serializable {
+public class DeliveryDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	private Long id;
@@ -28,7 +28,7 @@ public class BusinessDTO implements Serializable {
 	private String country;
 	private Long price;
 	
-	public BusinessDTO(Business entity) {
+	public DeliveryDTO(Delivery entity) {
 		this.id = entity.getId();
 		this.name = entity.getName();
 		this.cnpj = entity.getCnpj();

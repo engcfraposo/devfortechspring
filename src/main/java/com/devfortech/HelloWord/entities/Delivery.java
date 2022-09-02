@@ -13,7 +13,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import com.devfortech.HelloWord.dto.BusinessDTO;
+import com.devfortech.HelloWord.dto.DeliveryDTO;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -23,13 +23,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "tb_business")
+@Table(name = "tb_delivery")
 @Getter
 @Setter
 @NoArgsConstructor
 @RequiredArgsConstructor
 @EqualsAndHashCode
-public class Business implements Serializable {
+public class Delivery implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -51,7 +51,7 @@ public class Business implements Serializable {
 	@UpdateTimestamp
 	private Instant updated_at;
 
-	public Business(BusinessDTO dto) {
+	public Delivery(DeliveryDTO dto) {
 		this.id = dto.getId();
 		this.name = dto.getName();
 		this.cnpj = dto.getCnpj();
@@ -63,7 +63,7 @@ public class Business implements Serializable {
 		this.price = dto.getPrice();
 	}
 
-	public Business(Long id, BusinessDTO dto) {
+	public Delivery(Long id, DeliveryDTO dto) {
 		this.id = id;
 		this.name = dto.getName();
 		this.cnpj = dto.getCnpj();
