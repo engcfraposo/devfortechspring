@@ -2,12 +2,14 @@ package com.devfortech.HelloWord.entities;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -42,6 +44,9 @@ public class Clients implements Serializable {
 	private @NonNull String cep;
 	private @NonNull String city;
 	private @NonNull String country;
+	
+	@OneToMany(mappedBy = "client")
+	private Set<Order> orders_id;
 
 	@Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
 	@CreationTimestamp
