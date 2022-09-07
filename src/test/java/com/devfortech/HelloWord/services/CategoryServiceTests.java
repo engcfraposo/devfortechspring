@@ -3,6 +3,8 @@ package com.devfortech.HelloWord.services;
 import java.util.List;
 import java.util.Optional;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,12 +30,14 @@ public class CategoryServiceTests {
 	private long nonExistingId;
 	private PageImpl<Category> page;
 	private Category category;
+	private CategoryDTO categoryDTO;
 	
 	
 	@BeforeEach
 	void setUp() throws Exception {
 		existingId = 1L;
 		category = new Category(1L, "Fleight");
+		categoryDTO = new CategoryDTO(1L, "Fleight");
 		page = new PageImpl<Category>(List.of(category));
 		
 		//findAll
@@ -42,6 +46,12 @@ public class CategoryServiceTests {
 		//findById
 		Mockito.when(repository.findById(existingId)).thenReturn(Optional.of(category));
 		Mockito.when(repository.findById(nonExistingId)).thenReturn(Optional.empty());
+		
+		//insert and update
+		Mockito.when(repository.save(ArgumentMatchers.any())).thenReturn(category);
+		
+		Mockito.when(repository.getReferenceById(existingId)).thenReturn(category);
+		Mockito.when(repository.getReferenceById(nonExistingId)).thenThrow(EntityNotFoundException.class);
 	}
 	
 	@InjectMocks
@@ -72,5 +82,26 @@ public class CategoryServiceTests {
 		});
 		
 		Mockito.verify(repository, Mockito.times(1)).findById(nonExistingId);
+	}
+	
+	@Test
+	public void insertShouldReturnCategoryDTOWhenSaveData() {
+		CategoryDTO result = service.insert(categoryDTO);
+		Assertions.assertNotNull(result);
+	}
+	
+	@Test
+	public void updateShouldReturnCategoryDTOWhenIDExists() {
+		CategoryDTO result = service.update(existingId, categoryDTO);
+		Assertions.assertNotNull(result);
+	}
+	
+	@Test
+	public void updateShouldThrowResourceNotFoundExceptionWhemIdDoesNotExists() {
+		
+		Assertions.assertThrows(ResourceNotFoundException.class, () -> {
+			service.update(nonExistingId, categoryDTO);
+		});
+		Mockito.verify(repository, Mockito.times(1)).getReferenceById(nonExistingId);
 	}
 }
