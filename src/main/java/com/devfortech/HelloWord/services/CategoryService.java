@@ -12,45 +12,45 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.devfortech.HelloWord.dto.ClientsDTO;
-import com.devfortech.HelloWord.entities.Clients;
-import com.devfortech.HelloWord.repository.ClientsRepository;
+import com.devfortech.HelloWord.dto.CategoryDTO;
+import com.devfortech.HelloWord.entities.Category;
+import com.devfortech.HelloWord.repository.CategoryRepository;
 import com.devfortech.HelloWord.services.exceptions.DatabaseException;
 import com.devfortech.HelloWord.services.exceptions.ResourceNotFoundException;
 
 @Service
-public class ClientsService {
+public class CategoryService {
 	
 	@Autowired
-	private ClientsRepository repository;
+	private CategoryRepository repository;
 	
 	@Transactional(readOnly = true)
-	public Page<ClientsDTO> findAll(Pageable pageable){
-		Page<Clients> clients = repository.findAll(pageable);
-		return clients.map(entity -> new ClientsDTO(entity));
+	public Page<CategoryDTO> findAll(Pageable pageable){
+		Page<Category> category = repository.findAll(pageable);
+		return category.map(entity -> new CategoryDTO(entity));
 
 	}
 	
 	@Transactional(readOnly = true)
-	public ClientsDTO findById(Long id) {
-		Optional<Clients> obj = repository.findById(id);
-		Clients entity = obj.orElseThrow(()-> new ResourceNotFoundException("Client not found!" + id));
-		return new ClientsDTO(entity);
+	public CategoryDTO findById(Long id) {
+		Optional<Category> obj = repository.findById(id);
+		Category entity = obj.orElseThrow(()-> new ResourceNotFoundException("Client not found!" + id));
+		return new CategoryDTO(entity);
 	}
 	
 	@Transactional
-	public ClientsDTO insert(ClientsDTO dto) {
-		Clients entity = new Clients(dto);
+	public CategoryDTO insert(CategoryDTO dto) {
+		Category entity = new Category(dto);
 		entity = repository.save(entity);
-		return new ClientsDTO(entity);
+		return new CategoryDTO(entity);
 	}
 
 	@Transactional
-	public ClientsDTO update(Long id, ClientsDTO dto) {
+	public CategoryDTO update(Long id, CategoryDTO dto) {
 		try {
-			Clients entity = repository.getReferenceById(id);
-			entity = repository.save(new Clients(id,dto));
-			return new ClientsDTO(entity);
+			Category entity = repository.getReferenceById(id);
+			entity = repository.save(new Category(id,dto));
+			return new CategoryDTO(entity);
 		}
 		catch (EntityNotFoundException e) {
 			throw new ResourceNotFoundException("Client not found!" + id);

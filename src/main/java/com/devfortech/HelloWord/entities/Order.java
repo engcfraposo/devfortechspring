@@ -2,6 +2,8 @@ package com.devfortech.HelloWord.entities;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -11,14 +13,14 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import com.devfortech.HelloWord.dto.ClientsDTO;
-import com.devfortech.HelloWord.dto.DeliveryDTO;
 import com.devfortech.HelloWord.dto.OrderDTO;
 
 import lombok.EqualsAndHashCode;
@@ -50,6 +52,12 @@ public class Order implements Serializable {
 	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "delivery_id", nullable = false)
 	private Delivery delivery;
+	
+	@ManyToMany
+	@JoinTable(name = "tb_order_category",
+		joinColumns = @JoinColumn(name = "order_id"),
+		inverseJoinColumns = @JoinColumn(name = "category_id"))
+	Set<Category> categories = new HashSet<>();
 	
 	@Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
 	@CreationTimestamp
