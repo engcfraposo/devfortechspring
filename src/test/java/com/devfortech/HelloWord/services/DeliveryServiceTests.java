@@ -21,21 +21,21 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import com.devfortech.HelloWord.dto.CategoryDTO;
-import com.devfortech.HelloWord.entities.Category;
-import com.devfortech.HelloWord.repository.CategoryRepository;
+import com.devfortech.HelloWord.dto.DeliveryDTO;
+import com.devfortech.HelloWord.entities.Delivery;
+import com.devfortech.HelloWord.repository.DeliveryRepository;
 import com.devfortech.HelloWord.services.exceptions.DatabaseException;
 import com.devfortech.HelloWord.services.exceptions.ResourceNotFoundException;
 import com.devfortech.HelloWord.tests.Factory;
 
 @ExtendWith(SpringExtension.class)
-public class CategoryServiceTests {
+public class DeliveryServiceTests {
 	private long existingId;
 	private long nonExistingId;
 	private long dataViolationId;
-	private PageImpl<Category> page;
-	private Category category;
-	private CategoryDTO categoryDTO;
+	private PageImpl<Delivery> page;
+	private Delivery delivery;
+	private DeliveryDTO deliveryDTO;
 	
 	
 	@BeforeEach
@@ -43,21 +43,21 @@ public class CategoryServiceTests {
 		existingId = 1L;
 		nonExistingId = 9999L;
 		dataViolationId = 666L;
-		category = Factory.createCategory();
-		categoryDTO = Factory.createCategoryDTO();
-		page = new PageImpl<Category>(List.of(category));
+		delivery = Factory.createDelivery();
+		deliveryDTO = Factory.createDeliveryDTO();
+		page = new PageImpl<Delivery>(List.of(delivery));
 		
 		//findAll
 		Mockito.when(repository.findAll((Pageable)ArgumentMatchers.any())).thenReturn(page);
 		
 		//findById
-		Mockito.when(repository.findById(existingId)).thenReturn(Optional.of(category));
+		Mockito.when(repository.findById(existingId)).thenReturn(Optional.of(delivery));
 		Mockito.when(repository.findById(nonExistingId)).thenReturn(Optional.empty());
 		
 		//insert and update
-		Mockito.when(repository.save(ArgumentMatchers.any())).thenReturn(category);
+		Mockito.when(repository.save(ArgumentMatchers.any())).thenReturn(delivery);
 		
-		Mockito.when(repository.getReferenceById(existingId)).thenReturn(category);
+		Mockito.when(repository.getReferenceById(existingId)).thenReturn(delivery);
 		Mockito.when(repository.getReferenceById(nonExistingId)).thenThrow(EntityNotFoundException.class);
 		
 		//delete
@@ -67,21 +67,21 @@ public class CategoryServiceTests {
 	}
 	
 	@InjectMocks
-	private CategoryService service;
+	private DeliveryService service;
 	
 	@Mock
-	private CategoryRepository repository;
+	private DeliveryRepository repository;
 	
 	@Test
 	public void findAllShouldReturnPage() {
 		Pageable pageable = PageRequest.of(0, 10);
-		Page<CategoryDTO> result = service.findAll(pageable);
+		Page<DeliveryDTO> result = service.findAll(pageable);
 		Assertions.assertNotNull(result);
 	}
 	
 	@Test
-	public void findByIdShouldReturnCategoryWhenIdExists() {
-		CategoryDTO result = service.findById(existingId);
+	public void findByIdShouldReturnDeliveryWhenIdExists() {
+		DeliveryDTO result = service.findById(existingId);
 		
 		Assertions.assertNotNull(result);
 		Mockito.verify(repository, Mockito.times(1)).findById(existingId);
@@ -97,14 +97,14 @@ public class CategoryServiceTests {
 	}
 	
 	@Test
-	public void insertShouldReturnCategoryDTOWhenSaveData() {
-		CategoryDTO result = service.insert(categoryDTO);
+	public void insertShouldReturnDeliveryDTOWhenSaveData() {
+		DeliveryDTO result = service.insert(deliveryDTO);
 		Assertions.assertNotNull(result);
 	}
 	
 	@Test
-	public void updateShouldReturnCategoryDTOWhenIDExists() {
-		CategoryDTO result = service.update(existingId, categoryDTO);
+	public void updateShouldReturnDeliveryDTOWhenIDExists() {
+		DeliveryDTO result = service.update(existingId, deliveryDTO);
 		Assertions.assertNotNull(result);
 	}
 	
@@ -112,7 +112,7 @@ public class CategoryServiceTests {
 	public void updateShouldThrowResourceNotFoundExceptionWhemIdDoesNotExists() {
 		
 		Assertions.assertThrows(ResourceNotFoundException.class, () -> {
-			service.update(nonExistingId, categoryDTO);
+			service.update(nonExistingId, deliveryDTO);
 		});
 		Mockito.verify(repository, Mockito.times(1)).getReferenceById(nonExistingId);
 	}
