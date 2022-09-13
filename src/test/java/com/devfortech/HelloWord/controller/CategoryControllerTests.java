@@ -2,6 +2,8 @@ package com.devfortech.HelloWord.controller;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -16,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
@@ -33,6 +36,7 @@ public class CategoryControllerTests {
 	private long dataViolationId;
 	private PageImpl<CategoryDTO> page;
 	private CategoryDTO categoryDTO;
+	private String jsonBody;
 	
 	@BeforeEach
 	void setUp() throws Exception {
@@ -41,6 +45,7 @@ public class CategoryControllerTests {
 		dataViolationId = 666L;
 		categoryDTO = Factory.createCategoryDTO();
 		page = new PageImpl<CategoryDTO>(List.of(categoryDTO));
+		jsonBody = objectMapper.writeValueAsString(categoryDTO);
 		
 		//GET /category
 		Mockito.when(service.findAll(ArgumentMatchers.any())).thenReturn(page);
@@ -48,6 +53,13 @@ public class CategoryControllerTests {
 		//GET /category/id
 		Mockito.when(service.findById(existingId)).thenReturn(categoryDTO);
 		Mockito.when(service.findById(nonExistingId)).thenThrow(ResourceNotFoundException.class);
+		
+		//POST /category
+		Mockito.when(service.insert(categoryDTO)).thenReturn(categoryDTO);
+		
+		//PUT /category
+		Mockito.when(service.update(existingId, categoryDTO)).thenReturn(categoryDTO);
+		Mockito.when(service.update(nonExistingId, categoryDTO)).thenThrow(ResourceNotFoundException.class);
 		
 		//DELETE /category
 		Mockito.doNothing().when(service).delete(existingId);
@@ -98,6 +110,45 @@ public class CategoryControllerTests {
 	}
 	
 	@Test
+	public void insertShouldReturnCategoryDTOCreated() throws Exception {
+		ResultActions result = mockMvc.perform(post("/category")
+				.content(jsonBody)
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON));
+		
+		result.andExpect(status().isCreated());
+		result.andExpect(jsonPath("$.id").exists());
+		result.andExpect(jsonPath("$.name").exists());
+	}
+	
+	@Test
+	public void updateShouldReturnCategoryDTOWithIdExists() throws Exception {
+		ResultActions result = mockMvc.perform(put("/category/{id}", existingId)
+				.content(jsonBody)
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON));
+		
+		result.andDo(print());
+		result.andExpect(status().isOk());
+		result.andExpect(jsonPath("$.id").exists());
+		result.andExpect(jsonPath("$.name").exists());
+	}
+	
+	@Test
+	public void updateShouldThrowNotFoundExceptionWhenIdDoesNotExists() throws Exception {
+		ResultActions result = mockMvc.perform(put("/category/{id}", nonExistingId)
+				.content(jsonBody)
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON));
+		
+		result.andExpect(status().isNotFound());
+		result.andExpect(jsonPath("$.timestamp").exists());
+		result.andExpect(jsonPath("$.status").exists());
+		result.andExpect(jsonPath("$.error").exists());
+		result.andExpect(jsonPath("$.path").exists());
+	}
+	
+	@Test
 	public void deleteShouldDoNothingWhenIdExists() throws Exception {
 		ResultActions result = mockMvc.perform(delete("/category/{id}", existingId));
 		
@@ -119,7 +170,6 @@ public class CategoryControllerTests {
 	public void deleteShouldThrowDatabaseExceptionWhenhaveViolationId() throws Exception {
 		ResultActions result = mockMvc.perform(delete("/category/{id}", dataViolationId));
 		
-		result.andDo(print());
 		result.andExpect(status().isBadRequest());
 		result.andExpect(jsonPath("$.timestamp").exists());
 		result.andExpect(jsonPath("$.status").exists());
