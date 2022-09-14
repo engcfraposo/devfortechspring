@@ -9,6 +9,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.orm.jpa.JpaObjectRetrievalFailureException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,7 +29,6 @@ public class CategoryService {
 	public Page<CategoryDTO> findAll(Pageable pageable){
 		Page<Category> category = repository.findAll(pageable);
 		return category.map(entity -> new CategoryDTO(entity));
-
 	}
 	
 	@Transactional(readOnly = true)
@@ -53,6 +53,9 @@ public class CategoryService {
 			return new CategoryDTO(entity);
 		}
 		catch (EntityNotFoundException e) {
+			throw new ResourceNotFoundException("Client not found!" + id);
+		}
+		catch (JpaObjectRetrievalFailureException e) {
 			throw new ResourceNotFoundException("Client not found!" + id);
 		}
 	}

@@ -20,7 +20,7 @@ import lombok.Setter;
 public class CategoryDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	private @NonNull Long id;
+	private Long id;
 	private @NonNull String name;
 
 	public CategoryDTO(Category entity) {
