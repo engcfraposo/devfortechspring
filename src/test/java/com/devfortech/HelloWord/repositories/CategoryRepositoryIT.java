@@ -7,12 +7,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.devfortech.HelloWord.dto.CategoryDTO;
 import com.devfortech.HelloWord.entities.Category;
 import com.devfortech.HelloWord.repository.CategoryRepository;
 import com.devfortech.HelloWord.tests.Factory;
@@ -23,7 +23,7 @@ public class CategoryRepositoryIT {
 	private long existingId;
 	private long nonExistingId;
 	private long countTotalCategories;
-	private CategoryDTO dto;
+	private Category entity;
 	
 	
 	@BeforeEach
@@ -31,7 +31,7 @@ public class CategoryRepositoryIT {
 		existingId = 1L;
 		nonExistingId = 999L;
 		countTotalCategories = 4L;
-		dto = Factory.createCategoryDTO();
+		entity = Factory.createCategoryWithoutData();
 	}
 	
 	@Autowired
@@ -112,8 +112,49 @@ public class CategoryRepositoryIT {
 	
 	@Test
 	public void getReferenceByIdShouldReturnNothingWithIdDoesNotExists() {
-		Category result = repository.getReferenceById(nonExistingId);
+		Optional<Category> result = Optional.of(repository.getReferenceById(nonExistingId));
+		Assertions.assertTrue(result.isPresent());
+		Assertions.assertEquals(999, result.get().getId());
+	}
+	
+	@Test
+	public void insertShouldCreateNewCategory() {
+		entity.setName("Jegue");
+		Category result = repository.save(entity);
+		Assertions.assertEquals(5L, result.getId());
+		Assertions.assertEquals(entity.getName(), result.getName());
+	} 
+	
+	@Test
+	public void updateShouldCreateNewCategoryIfIdExists() {
+		entity.setName("Jegue");
+		entity.setId(existingId);
+		Category result = repository.save(entity);
+		Assertions.assertEquals(existingId, result.getId());
+		Assertions.assertEquals(entity.getName(), result.getName());
+	} 
+	
+
+	@Test
+	public void updateShouldReturnNewCategoryIfIdDoesNotExists() {
+		entity.setId(nonExistingId);
+		Category result = repository.save(entity);
+		Assertions.assertEquals(6L, result.getId());
+		Assertions.assertEquals(entity.getName(), result.getName());
+	} 
+	
+	@Test
+	public void deleteShouldDeleteObjectWhenIdExists() {;
+		repository.deleteById(existingId);
+		Optional<Category> result = repository.findById(nonExistingId);
 		
-		Assertions.assertEquals(nonExistingId, result.getId());
+		Assertions.assertFalse(result.isPresent());
+	} 
+	
+	@Test
+	public void deleteShouldThrowEmptyResultDataAccessExceptionWhenIdDoesNotExist() {
+		Assertions.assertThrows(EmptyResultDataAccessException.class, () -> {
+			repository.deleteById(nonExistingId);
+		});
 	}
 }

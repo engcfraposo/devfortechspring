@@ -9,6 +9,9 @@ public class Factory {
 	public static Category createCategory() {
 		return new Category(1L, "Fleight"); 
 	}
+	public static Category createCategoryWithoutData() {
+		return new Category();
+	}
 	public static CategoryDTO createCategoryDTO() {
 		Category category = createCategory();
 		return new CategoryDTO(category);
