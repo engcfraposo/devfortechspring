@@ -2,9 +2,13 @@ package com.devfortech.HelloWord;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
-@SpringBootApplication
+import com.devfortech.HelloWord.repository.NotificationRepository;
+
+
+@SpringBootApplication()
+@EnableMongoRepositories(basePackageClasses = NotificationRepository.class)
 public class HelloWordApplication {
 
 	public static void main(String[] args) {
