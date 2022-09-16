@@ -26,6 +26,7 @@ public class ClientsDTO implements Serializable {
 	private String cep;
 	private String city;
 	private String country;
+	private String password;
 	
 	public ClientsDTO(Clients entity) {
 		this.id = entity.getId();
@@ -36,6 +37,7 @@ public class ClientsDTO implements Serializable {
 		this.cep = entity.getCep();
 		this.city = entity.getCity();
 		this.country = entity.getCountry();
+		this.password = entity.getPassword();
 	}
 
 }

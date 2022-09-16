@@ -44,6 +44,7 @@ public class Clients implements Serializable {
 	private @NonNull String cep;
 	private @NonNull String city;
 	private @NonNull String country;
+	private @NonNull String password;
 	
 	@OneToMany(mappedBy = "client")
 	private Set<Order> orders_id;
@@ -64,6 +65,7 @@ public class Clients implements Serializable {
 		this.cep = dto.getCep();
 		this.city = dto.getCity();
 		this.country = dto.getCountry();
+		this.password = dto.getPassword();
 	}
 
 	public Clients(Long id, ClientsDTO dto) {
@@ -75,6 +77,7 @@ public class Clients implements Serializable {
 		this.cep = dto.getCep();
 		this.city = dto.getCity();
 		this.country = dto.getCountry();
+		this.password = dto.getPassword();
 	}
 
 }
