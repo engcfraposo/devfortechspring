@@ -1,6 +1,10 @@
 package com.devfortech.HelloWord.dto;
 
 import java.io.Serializable;
+import java.util.Collection;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import com.devfortech.HelloWord.entities.Clients;
 
@@ -26,6 +30,8 @@ public class ClientsDTO implements Serializable {
 	private String cep;
 	private String city;
 	private String country;
+	private String username;
+	private String password;
 	
 	public ClientsDTO(Clients entity) {
 		this.id = entity.getId();
@@ -36,6 +42,9 @@ public class ClientsDTO implements Serializable {
 		this.cep = entity.getCep();
 		this.city = entity.getCity();
 		this.country = entity.getCountry();
+		this.username = entity.getUsername();
+		this.password = entity.getPassword();
 	}
+
 
 }

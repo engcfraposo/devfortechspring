@@ -2,6 +2,7 @@ package com.devfortech.HelloWord.entities;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.Collection;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -14,6 +15,8 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import com.devfortech.HelloWord.dto.ClientsDTO;
 
@@ -31,7 +34,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @RequiredArgsConstructor
 @EqualsAndHashCode
-public class Clients implements Serializable {
+public class Clients implements Serializable, UserDetails {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -44,6 +47,8 @@ public class Clients implements Serializable {
 	private @NonNull String cep;
 	private @NonNull String city;
 	private @NonNull String country;
+	private @NonNull String username;
+	private @NonNull String password;
 	
 	@OneToMany(mappedBy = "client")
 	private Set<Order> orders_id;
@@ -64,6 +69,8 @@ public class Clients implements Serializable {
 		this.cep = dto.getCep();
 		this.city = dto.getCity();
 		this.country = dto.getCountry();
+		this.username = dto.getUsername();
+		this.password = dto.getPassword();
 	}
 
 	public Clients(Long id, ClientsDTO dto) {
@@ -75,6 +82,38 @@ public class Clients implements Serializable {
 		this.cep = dto.getCep();
 		this.city = dto.getCity();
 		this.country = dto.getCountry();
+		this.username = dto.getUsername();
+		this.password = dto.getPassword();
+	}
+
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean isAccountNonExpired() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }
